@@ -4,8 +4,7 @@ def D(points):
     Ds=np.zeros(points.shape)
     nb_points = points.shape[0]
     mat = np.diag([4]*nb_points)+np.diag([1]*(nb_points-1),1)+np.diag([1]*(nb_points-1),-1)+np.diag([1],nb_points-1)+np.diag([1],-nb_points+1)
-    mat_inv = np.linalg.inv(mat)
-    Ds[:,:]=np.linalg.solve(mat,(np.append(points[1:,:],points[:1,:],axis=0)-np.append(points[-1:,:],points[:-1,:],axis=0)))
+    Ds[:,:]=np.linalg.solve(mat,3*(np.append(points[1:,:],points[:1,:],axis=0)-np.append(points[-1:,:],points[:-1,:],axis=0)))
     return Ds
 
 def cree_spline(points,num=4): #Donner une valeur par défaut à step
@@ -25,7 +24,7 @@ def cree_spline(points,num=4): #Donner une valeur par défaut à step
         for i in range(3):
             f[:,i] = As[k,i,0]+As[k,i,1]*t+As[k,i,2]*np.power(t,2)+As[k,i,3]*np.power(t,3) #À corriger probablement
         longueur+=sum(np.sqrt(np.power((f[:-1,:]-f[1:,:])[:,0],2)+np.power((f[:-1,:]-f[1:,:])[:,1],2)+np.power((f[:-1,:]-f[1:,:])[:,2],2))) #Douteux ici aussi
-    step=longueur/100 # 1000 peut-être ?
+    step=longueur/500 # 1000 peut-être ?
     dt=0.001
     step_part=0
     spline=points[:1,:]
@@ -38,7 +37,7 @@ def cree_spline(points,num=4): #Donner une valeur par défaut à step
         distance = np.sqrt(np.power((nouveau_point-point)[0],2)+np.power((nouveau_point-point)[1],2)+np.power((nouveau_point-point)[2],2))
         point=nouveau_point
         step_part+=distance
-        if step_part>step:
+        if step_part>=step:
             spline = np.append(spline,point.reshape(1,3),axis=0)
             step_part-=step
         if t>=1:

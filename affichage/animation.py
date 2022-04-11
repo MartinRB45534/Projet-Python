@@ -3,14 +3,17 @@ import numpy as np
 from matplotlib.animation import FuncAnimation
 from circuit.circuit import Circuit
 from circuit.spline import spline
+from affichage.camera import Camera, Camera_troisieme_personne
 
 circuit = Circuit(spline)
 circuit.cabine.vitesse=3
 
 fig = plt.figure()
 plt.style.use('dark_background')
+camera_globale = Camera(circuit)
 ax1 = fig.add_subplot(1, 2, 1, projection='3d')
 ax1.grid(False)
+camera_tp = Camera_troisieme_personne(circuit)
 ax2 = fig.add_subplot(1, 2, 2, projection='3d')
 ax2.grid(False)
 
@@ -48,8 +51,8 @@ def draw_local(ax):
 def animate(i):
     ax1.clear()
     ax2.clear()
-    draw_tp(ax1)
-    draw_global(ax2)
+    camera_globale.draw(ax1)
+    camera_tp.draw(ax2)
     circuit.deplace()
 
 # run the animation
