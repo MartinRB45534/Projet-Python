@@ -26,7 +26,7 @@ class File_opening_error(Exception):
 class Not_enough_points(File_opening_error):
   def __init__(self, nb_points):
     self.nb_points = nb_points
-    self.message = f"Il faut au moins 3 points pour dessiner une spline, le fichier n'en a que {nb_points} !"
+    self.message = f"Il faut au moins 4 points pour dessiner une spline, le fichier n'en a que {nb_points} !"
     super().__init__(self.message)
 
 class Not_enough_lines(File_opening_error):
